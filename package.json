@@ -5,19 +5,28 @@
   "type": "module",
   "main": "lib/router/PerfboardRouter.ts",
   "scripts": {
-    "test": "tsx test-router.ts"
+    "test": "vite",
+    "test:cli": "tsx test-router.ts"
   },
   "keywords": ["tscircuit", "perfboard", "router", "pcb", "autorouter"],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "*",
-    "typescript": "*"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "*",
+    "vite": "^5.2.0"
   },
   "dependencies": {
-    "@tscircuit/core": "*",
-    "@tscircuit/pcb-viewer": "*",
-    "@tscircuit/soup": "*",
+    "@tscircuit/core": "^0.0.1652",
+    "@tscircuit/pcb-viewer": "^1.11.383",
+    "@tscircuit/soup": "^0.0.73",
+    "@tscircuit/runframe": "latest",
+    "circuit-json": "latest",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tsx": "*"
   }
 }
