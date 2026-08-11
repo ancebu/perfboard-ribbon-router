@@ -146,6 +146,14 @@ export class PerfboardRouter {
       targets.shift(); // Remove first from targets
     }
 
+    // If we have manual routes but unrouted terminals, connect them
+    if (sources.length > 0 && targets.length > 0) {
+      // Continue to routing
+    } else if (sources.length > 0 && targets.length === 0) {
+      // All terminals are already on manual routes, net is complete
+      return true;
+    }
+
     if (sources.length === 0 || targets.length === 0) return true;
 
     // Standard A* Loop

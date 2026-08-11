@@ -1,17 +1,23 @@
 {
-  "name": "workspace",
+  "name": "tscircuit-perfboard-router",
   "version": "1.0.0",
-  "description": "This document is the definitive technical specification for an AI agent or developer to implement a constraint-driven, 2D graph autorouter for tscircuit. It integrates physical embroidery semantics (mirrored ribbons), 45-degree diagonal \"bishop\" jumps, insulated jumper wire fallbacks, and protected manual pre-routes.",
+  "description": "A constraint-driven 2D graph autorouter for tscircuit perfboards with mirrored ribbon traces, 45-degree diagonal bishop jumps, insulated jumper wire fallbacks, and protected manual pre-routes.",
   "type": "module",
-  "main": "index.js",
+  "main": "lib/router/PerfboardRouter.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsx test-router.ts"
   },
-  "keywords": [],
+  "keywords": ["tscircuit", "perfboard", "router", "pcb", "autorouter"],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^26.2.0",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@tscircuit/core": "^0.0.1652",
+    "@tscircuit/pcb-viewer": "^1.11.383",
+    "@tscircuit/soup": "^0.0.73",
+    "tsx": "^4.23.12"
   }
 }
