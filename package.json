@@ -11,13 +11,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^26.2.0",
-    "typescript": "^7.0.2"
+    "@types/node": "*",
+    "typescript": "*"
   },
   "dependencies": {
-    "@tscircuit/core": "^0.0.1652",
-    "@tscircuit/pcb-viewer": "^1.11.383",
-    "@tscircuit/soup": "^0.0.73",
-    "tsx": "^4.23.12"
+    "@tscircuit/core": "*",
+    "@tscircuit/pcb-viewer": "*",
+    "@tscircuit/soup": "*",
+    "tsx": "*"
   }
 }
