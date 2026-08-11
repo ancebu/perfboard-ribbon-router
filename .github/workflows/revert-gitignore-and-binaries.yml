@@ -1,0 +1,67 @@
+name: revert-gitignore-and-binaries
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Revert gitignore + strip binaries
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -e
+          git config user.name "gitignore-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git fetch origin "$BASE_REF"
+
+          MERGE_BASE=$(git merge-base "origin/$BASE_REF" HEAD)
+          CHANGED=0
+
+          # 1. Always force .gitignore back to base version
+          if git show "origin/$BASE_REF:.gitignore" > /tmp/base_gitignore 2>/dev/null; then
+            cp /tmp/base_gitignore .gitignore
+          else
+            rm -f .gitignore
+          fi
+          if ! git diff --quiet -- .gitignore; then
+            git add -A -- .gitignore
+            CHANGED=1
+          fi
+
+          # 2. Find binary files added/modified in this PR
+          #    git diff --numstat prints "-\t-\tpath" for binary files
+          BINARY_FILES=$(git diff --numstat "$MERGE_BASE" HEAD -- . | awk -F'\t' '$1 == "-" && $2 == "-" {print $3}')
+
+          if [ -n "$BINARY_FILES" ]; then
+            while IFS= read -r f; do
+              [ -z "$f" ] && continue
+              if git show "$MERGE_BASE:$f" > /tmp/restored_file 2>/dev/null; then
+                mkdir -p "$(dirname "$f")"
+                cp /tmp/restored_file "$f"
+                git add -- "$f"
+              else
+                # didn't exist on base branch -> it was newly added, just drop it
+                git rm -f --ignore-unmatch -- "$f" > /dev/null
+              fi
+              CHANGED=1
+            done <<< "$BINARY_FILES"
+          fi
+
+          if [ "$CHANGED" -eq 1 ]; then
+            git commit -m "chore: revert .gitignore and strip binary files"
+            git push
+          else
+            echo "Nothing to revert."
+          fi
